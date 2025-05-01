@@ -7,6 +7,7 @@ const CompanySchema = new Schema(
     name: String,
     industry: String,
     location: String,
+    email: { type: String, unique: true, required: true },
     phone: String,
   },
   {

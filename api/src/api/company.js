@@ -1,8 +1,10 @@
 const CompanyService = require("../services/company-service");
+const apiKeyAuth = require("./middleware/apiKeyAuth");
 const { uploadViaMulter } = require("./middleware/multerMiddleWare");
 
 module.exports = (app) => {
   const service = new CompanyService();
+  app.use(apiKeyAuth);
   app.get("/company/test", async (req, res) => {
     return res.json({ message: "it works" });
   });

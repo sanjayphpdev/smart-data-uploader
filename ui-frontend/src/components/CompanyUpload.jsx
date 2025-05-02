@@ -44,6 +44,9 @@ export default function CompanyUpload() {
     try {
       const res = await fetch(apiUrl + "/company/importdata", {
         method: "POST",
+        headers: {
+          "x-api-key": apiKey,
+        },
         body: formData,
       });
 

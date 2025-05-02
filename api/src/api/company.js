@@ -1,6 +1,7 @@
 const CompanyService = require("../services/company-service");
 const apiKeyAuth = require("./middleware/apiKeyAuth");
 const { uploadViaMulter } = require("./middleware/multerMiddleWare");
+const { validateUpload } = require("./middleware/validateUpload");
 
 module.exports = (app) => {
   const service = new CompanyService();
@@ -12,6 +13,7 @@ module.exports = (app) => {
   app.post(
     "/company/importdata",
     uploadViaMulter.single("file"),
+    validateUpload,
     async (req, res, next) => {
       try {
         const file = req.file;

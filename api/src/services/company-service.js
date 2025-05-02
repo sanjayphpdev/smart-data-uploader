@@ -11,6 +11,25 @@ class CompanyService {
     this.repository = new CompanyRepository();
   }
 
+  validData(data) {
+    // Email: required + valid format
+    if (!data.Email) {
+      return false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.Email)) {
+      return false;
+    }
+
+    // Phone: optional but must be 10-digit number if present
+    if (data.Phone) {
+      const cleaned = data.Phone.toString().replace(/\D/g, ""); // remove non-digits
+      if (!/^\d{10}$/.test(cleaned)) {
+        //errors.Phone = "Phone number must be exactly 10 digits.";
+        return false;
+      }
+    }
+    return true;
+  }
+
   async ParseAndUploadData(userInput) {
     const { file, upload_rule } = userInput;
     try {
@@ -20,7 +39,9 @@ class CompanyService {
         const results = [];
         const parser = fs.createReadStream(file.path).pipe(csv());
         for await (const record of parser) {
-          results.push(record);
+          if (this.validData(record)) {
+            results.push(record);
+          }
         }
         fs.unlinkSync(file.path); //remove file after processing
         const response = await this.performDBOperationByRule(
@@ -29,11 +50,18 @@ class CompanyService {
         );
         return FormateData(response);
       } else {
+        const results = [];
         const workbook = xlsx.readFile(file.path);
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
-        const results = xlsx.utils.sheet_to_json(sheet);
+        const rows = xlsx.utils.sheet_to_json(sheet);
         fs.unlinkSync(file.path); //remove file after processing
+        rows.forEach((row, index) => {
+          if (this.validData(row)) {
+            results.push(row);
+          }
+        });
+
         const response = await this.performDBOperationByRule(
           results,
           upload_rule

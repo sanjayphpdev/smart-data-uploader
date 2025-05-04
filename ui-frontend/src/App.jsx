@@ -3,10 +3,12 @@ import CompanyUpload from "./components/CompanyUpload";
 function App() {
   return (
     <>
-      <h1 className="text-3xl font-bold bg-yellow-400">
-        {import.meta.env.VITE_APP_NAME}
-      </h1>
-      <CompanyUpload></CompanyUpload>
+      <div className="w-full max-w-md mx-auto">
+        <h1 className="text-xl sm:text-2xl md:text-3x font-bold bg-yellow-400">
+          {import.meta.env.VITE_APP_NAME}
+        </h1>
+        <CompanyUpload></CompanyUpload>
+      </div>
     </>
   );
 }

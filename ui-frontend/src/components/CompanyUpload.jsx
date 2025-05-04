@@ -64,9 +64,9 @@ export default function CompanyUpload() {
   };
 
   return (
-    <div className=" p-4 flex">
-      <Card className="w-full max-w-lg p-6">
-        <CardContent className="flex flex-col gap-4">
+    <div className="mt-3 flex">
+      <Card className="flex flex-col md:flex-row gap-4">
+        <CardContent className="flex flex-col gap-4 p-3">
           <Label htmlFor="file">
             Upload csv or xlsx file to import company data
           </Label>
